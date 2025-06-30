@@ -7,7 +7,7 @@ check_for_updates() {
     write_out -1 'Checking for new commits on upstream branch.\n'
 
     # fetch commits from upstream branch within given time frame (default 1 month)
-    git fetch --quiet --shallow-since="${INPUT_SHALLOW_SINCE}" upstream "${INPUT_UPSTREAM_SYNC_BRANCH}"
+    git fetch --quiet --tags --shallow-since="${INPUT_SHALLOW_SINCE}" upstream "${INPUT_UPSTREAM_SYNC_BRANCH}"
     COMMAND_STATUS=$?
     
     echo "测试1"
@@ -24,7 +24,7 @@ check_for_updates() {
     UPSTREAM_COMMIT_TAG=$(git describe upstream/${INPUT_UPSTREAM_SYNC_BRANCH} --tags --abbrev=0 2>/dev/null)
 
     # check is latest upstream hash is in target branch
-    git fetch --quiet --shallow-since="${INPUT_SHALLOW_SINCE}" origin "${INPUT_TARGET_SYNC_BRANCH}"
+    git fetch --quiet --tags --shallow-since="${INPUT_SHALLOW_SINCE}" origin "${INPUT_TARGET_SYNC_BRANCH}"
     BRANCH_WITH_LATEST="$(git branch "${INPUT_TARGET_SYNC_BRANCH}" --contains="${UPSTREAM_COMMIT_HASH}")"
     BRANCH_TAG_LATEST=$(git describe ${INPUT_TARGET_SYNC_BRANCH} --tags --abbrev=0 2>/dev/null)
 
