@@ -35,7 +35,7 @@ check_for_updates() {
     
     if [ -z "${UPSTREAM_COMMIT_TAG}" ]; then
     	if [ -z "${BRANCH_TAG_LATEST}" ]; then
-    		HAS_NEW_TAGS=flase
+    		HAS_NEW_TAGS=false
     	else
     		HAS_NEW_TAGS="error"
     	fi
@@ -54,6 +54,8 @@ check_for_updates() {
     elif [ "${HAS_NEW_COMMITS}" = "error" ] && [ "${HAS_NEW_COMMITS}" = "error" ]; then
         write_out 95 'There was an error checking for new commits.'
     fi
+    
+    find_last_synced_commit
 }
 
 exit_no_commits() {
@@ -77,11 +79,12 @@ find_last_synced_commit() {
             break
         fi
     done
+    output_new_commit_list
 }
 
 # display new commits since last sync
 output_new_commit_list() {
-    if [ "${HAS_NEW_COMMITS}" != true ] && [ -z "${LAST_SYNCED_COMMIT}" ]; then
+    if [ "${HAS_NEW_COMMITS}" != true ] || [ -z "${LAST_SYNCED_COMMIT}" ]; then
         write_out -1 "\nNo previous sync found from upstream repo. Syncing entire commit history."
         UNSHALLOW=true
     else
@@ -101,9 +104,10 @@ output_new_commit_list() {
     		fi
     	done
     else
-    	write_out -1 '\nNo found tags'
+    	write_out -1 '\nNo found tags.'
     fi
 
+	sync_new_commits
 }
 
 # sync from upstream to target_sync_branch
