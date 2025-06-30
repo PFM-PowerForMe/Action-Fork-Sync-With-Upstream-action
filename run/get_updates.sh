@@ -60,8 +60,6 @@ check_for_updates() {
     elif [ "${HAS_NEW_COMMITS}" = "error" ] && [ "${HAS_NEW_TAGS}" = "error" ]; then
         write_out 95 'There was an error checking for new commits.'
     fi
-    
-    find_last_synced_commit
 }
 
 exit_no_commits() {
@@ -85,8 +83,6 @@ find_last_synced_commit() {
             break
         fi
     done
-
-    output_new_commit_list
 }
 
 # display new commits since last sync
@@ -113,8 +109,6 @@ output_new_commit_list() {
     else
     	write_out -1 '\nNo found tags.'
     fi
-
-	sync_new_commits
 }
 
 # sync from upstream to target_sync_branch
