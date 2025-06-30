@@ -19,12 +19,16 @@ check_for_updates() {
     fi
 
     UPSTREAM_COMMIT_HASH=$(git rev-parse "upstream/${INPUT_UPSTREAM_SYNC_BRANCH}")
-    UPSTREAM_COMMIT_TAG=$(git describe "upstream/${INPUT_UPSTREAM_SYNC_BRANCH}" --tags --abbrev=0 2>/dev/null)
+    UPSTREAM_COMMIT_TAG=$(git describe --tags --abbrev=0 "upstream/${INPUT_UPSTREAM_SYNC_BRANCH}" 2>/dev/null)
+    for TAG in $(git tag); do
+  		git tag -d "${TAG}" > /dev/null 2>&1
+	done
 
     # check is latest upstream hash is in target branch
     git fetch --quiet --tags --shallow-since="${INPUT_SHALLOW_SINCE}" origin "${INPUT_TARGET_SYNC_BRANCH}"
     BRANCH_WITH_LATEST="$(git branch "${INPUT_TARGET_SYNC_BRANCH}" --contains="${UPSTREAM_COMMIT_HASH}")"
     BRANCH_TAG_LATEST=$(git describe "${INPUT_TARGET_SYNC_BRANCH}" --tags --abbrev=0 2>/dev/null)
+    git fetch upstream --quiet --tags
 
     if [ -z "${UPSTREAM_COMMIT_HASH}" ]; then
         HAS_NEW_COMMITS="error"
@@ -92,11 +96,10 @@ output_new_commit_list() {
 
     if [ "${HAS_NEW_TAGS}" = true ]; then
     	write_out -1 '\nNew tags since last sync:'
-    	UPSTREAM_TAGS="$(git ls-remote --tags --quiet --sort=-v:refname upstream)"
-    	for tag in ${UPSTREAM_TAGS}; do
-    		UP_TAG="$(awk -F'refs/tags/' '{if (NF>1) print $2}' "${tag}" | sed 's/\^\{\}$//')"
+    	UPSTREAM_TAGS="$(git for-each-ref --sort=-creatordate --format '%(refname:short)' refs/tags)"
+    	for UP_TAG in ${UPSTREAM_TAGS}; do
     		if [ "${UP_TAG}" != "${BRANCH_TAG_LATEST}" ]; then
-    			echo -e "new tag: ${UP_TAG}\n"
+    			write_out -1 "new tag: ${UP_TAG}\n"
     		else
     			break
     		fi
