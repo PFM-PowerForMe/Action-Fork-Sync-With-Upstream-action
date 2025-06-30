@@ -33,6 +33,9 @@ check_for_updates() {
         HAS_NEW_COMMITS=true
     fi
     
+    echo "${UPSTREAM_COMMIT_TAG}"
+    echo "${BRANCH_TAG_LATEST}"
+    
     if [ -z "${UPSTREAM_COMMIT_TAG}" ]; then
     	if [ -z "${BRANCH_TAG_LATEST}" ]; then
     		HAS_NEW_TAGS=false
