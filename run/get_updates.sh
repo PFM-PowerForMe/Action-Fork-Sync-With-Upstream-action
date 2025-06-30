@@ -81,6 +81,9 @@ find_last_synced_commit() {
 
 # display new commits since last sync
 output_new_commit_list() {
+	echo "检测变量"
+    echo ${LAST_SYNCED_COMMIT}
+    echo "检测完成"
     if [ -z "${LAST_SYNCED_COMMIT}" ]; then
         write_out -1 "\nNo previous sync found from upstream repo. Syncing entire commit history."
         UNSHALLOW=true
