@@ -14,6 +14,7 @@ check_for_updates() {
         # if shallow fetch fails, no new commits are avilable for sync
         HAS_NEW_COMMITS=false
         HAS_NEW_TAGS=false
+        VERSION="error"
         set_out_put
         exit_no_commits
     fi
@@ -41,15 +42,19 @@ check_for_updates() {
     if [ -z "${UPSTREAM_COMMIT_TAG}" ]; then
     	if [ -z "${BRANCH_TAG_LATEST}" ]; then
     		HAS_NEW_TAGS=false
+    		VERSION="error"
     	else
     		HAS_NEW_TAGS="error"
+    		VERSION="error"
     	fi
     elif [ "${UPSTREAM_COMMIT_TAG}" = "${BRANCH_TAG_LATEST}" ]; then
     	HAS_NEW_TAGS=false
+    	VERSION="error"
     else
     	HAS_NEW_TAGS=true
+    	VERSION=${UPSTREAM_COMMIT_TAG}
     fi
-
+	
     # output 'has_new_commits' value to workflow environment
     set_out_put
 
@@ -68,6 +73,7 @@ exit_no_commits() {
 set_out_put() {
     echo "has_new_commits=${HAS_NEW_COMMITS}" >> $GITHUB_OUTPUT
     echo "has_new_tags=${HAS_NEW_TAGS}" >> $GITHUB_OUTPUT
+    echo "version=${VERSION}" >> $GITHUB_OUTPUT
 }
 
 find_last_synced_commit() {

@@ -82,6 +82,8 @@ outputs:
     description: 'true when new commits were included in this sync'
   has_new_tags:
     description: 'true when new tags'
+  version:
+    description: 'latest tag'
 
 runs:
   using: 'node20'
