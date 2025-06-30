@@ -10,7 +10,6 @@ check_for_updates() {
     git fetch --quiet --tags --shallow-since="${INPUT_SHALLOW_SINCE}" upstream "${INPUT_UPSTREAM_SYNC_BRANCH}"
     COMMAND_STATUS=$?
     
-    echo "测试1"
     if [ "${COMMAND_STATUS}" != 0 ]; then
         # if shallow fetch fails, no new commits are avilable for sync
         HAS_NEW_COMMITS=false
@@ -18,7 +17,6 @@ check_for_updates() {
         set_out_put
         exit_no_commits
     fi
-    echo "测试2"
 
     UPSTREAM_COMMIT_HASH=$(git rev-parse "upstream/${INPUT_UPSTREAM_SYNC_BRANCH}")
     UPSTREAM_COMMIT_TAG=$(git describe upstream/${INPUT_UPSTREAM_SYNC_BRANCH} --tags --abbrev=0 2>/dev/null)
@@ -35,10 +33,7 @@ check_for_updates() {
     else
         HAS_NEW_COMMITS=true
     fi
-    
-    echo "${UPSTREAM_COMMIT_TAG}"
-    echo "${BRANCH_TAG_LATEST}"
-    echo "测试3"
+
     if [ -z "${UPSTREAM_COMMIT_TAG}" ]; then
     	if [ -z "${BRANCH_TAG_LATEST}" ]; then
     		HAS_NEW_TAGS=false
@@ -53,7 +48,7 @@ check_for_updates() {
 
     # output 'has_new_commits' value to workflow environment
     set_out_put
-    echo "测试4"
+
     # early exit if no new commits or something failed
     if [ "${HAS_NEW_COMMITS}" = false ] && [ "${HAS_NEW_TAGS}" = false ]; then
         exit_no_commits
