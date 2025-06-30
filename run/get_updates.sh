@@ -18,10 +18,12 @@ check_for_updates() {
     fi
 
     UPSTREAM_COMMIT_HASH=$(git rev-parse "upstream/${INPUT_UPSTREAM_SYNC_BRANCH}")
+    UPSTREAM_COMMIT_TAG=$(git describe "upstream/${INPUT_UPSTREAM_SYNC_BRANCH}" --tags --abbrev=0 2>/dev/null)
 
     # check is latest upstream hash is in target branch
     git fetch --quiet --shallow-since="${INPUT_SHALLOW_SINCE}" origin "${INPUT_TARGET_SYNC_BRANCH}"
     BRANCH_WITH_LATEST="$(git branch "${INPUT_TARGET_SYNC_BRANCH}" --contains="${UPSTREAM_COMMIT_HASH}")"
+    BRANCH_TAG_LATEST=$(git describe "${INPUT_TARGET_SYNC_BRANCH}" --tags --abbrev=0 2>/dev/null)
 
     if [ -z "${UPSTREAM_COMMIT_HASH}" ]; then
         HAS_NEW_COMMITS="error"
@@ -30,14 +32,26 @@ check_for_updates() {
     else
         HAS_NEW_COMMITS=true
     fi
+    
+    if [ -z "${UPSTREAM_COMMIT_TAG}" ]; then
+    	if [ -z "${BRANCH_TAG_LATEST}" ]; then
+    		HAS_NEW_TAGS=flase
+    	else
+    		HAS_NEW_TAGS="error"
+    	fi
+    elif [ "${UPSTREAM_COMMIT_TAG}" = "${BRANCH_TAG_LATEST}" ]; then
+    	HAS_NEW_TAGS=false
+    else
+    	HAS_NEW_TAGS=true
+    fi
 
     # output 'has_new_commits' value to workflow environment
     set_out_put
 
     # early exit if no new commits or something failed
-    if [ "${HAS_NEW_COMMITS}" = false ]; then
+    if [ "${HAS_NEW_COMMITS}" = false ] && [ "${HAS_NEW_TAGS}" = false ]; then
         exit_no_commits
-    elif [ "${HAS_NEW_COMMITS}" = "error" ]; then
+    elif [ "${HAS_NEW_COMMITS}" = "error" ] && [ "${HAS_NEW_COMMITS}" = "error" ]; then
         write_out 95 'There was an error checking for new commits.'
     fi
 }
@@ -48,6 +62,7 @@ exit_no_commits() {
 
 set_out_put() {
     echo "has_new_commits=${HAS_NEW_COMMITS}" >> $GITHUB_OUTPUT
+    echo "has_new_tags=${HAS_NEW_TAGS}" >> $GITHUB_OUTPUT
 }
 
 find_last_synced_commit() {

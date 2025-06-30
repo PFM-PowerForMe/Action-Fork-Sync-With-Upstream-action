@@ -30,7 +30,7 @@ inputs:
   target_branch_checkout_args:
     description: 'Any extra args to pass to `git checkout` on the source branch, e.g. --recurse-submodules :: default = ""'
     required: false
-    default: ''
+    default: '--recurse-submodules'
 
   git_log_format_args:
     description: 'Args to print the list of new commits from upstream :: default = --pretty=oneline'
@@ -40,12 +40,12 @@ inputs:
   upstream_pull_args:
     description: 'Git args passed when running `git pull` against the upstream repo, e.g. --ff-only or --tags :: default = ""'
     required: false
-    default: ''
+    default: '--tags'
 
   target_branch_push_args:
     description: 'Git args passed when running `git push` to apply changes to the source repo, e.g. --force :: default = ""'
     required: false
-    default: ''
+    default: '--tags --follow-tags'
   
   git_config_user:
     description: 'Git user credentials for sigining commit, (set to "null" for no config)'
@@ -60,7 +60,7 @@ inputs:
   git_config_pull_rebase:
     description: 'Git config for "pull.rebase" settings, usually recommend false for this action (set to "null" for no config)'
     required: true
-    default: 'false'
+    default: 'true'
 
   test_mode:
     description: If set to 'true', runs verification test on all inputs and any testable actions that use them
@@ -75,11 +75,13 @@ inputs:
   shallow_since:
     description: 'Length of time used when fetching shallow repo data, should match how often you perform a sync'
     required: true
-    default: '1 month ago'
+    default: '4 year ago'
 
 outputs:
   has_new_commits:
     description: 'true when new commits were included in this sync'
+  has_new_tags:
+    description: 'true when new tags'
 
 runs:
   using: 'node20'
