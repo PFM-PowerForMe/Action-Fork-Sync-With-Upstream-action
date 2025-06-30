@@ -94,7 +94,7 @@ output_new_commit_list() {
     	UPSTREAM_TAGS="$(git ls-remote --tags --quiet --sort=-v:refname upstream)"
     	for tag in ${UPSTREAM_TAGS}; do
     		UP_TAG="$(awk -F'refs/tags/' '{if (NF>1) print $2}' "${tag}" | sed 's/\^\{\}$//')"
-    		if [ "${UP_TAG}" != "${BRANCH_TAG_LATEST}" ]
+    		if [ "${UP_TAG}" != "${BRANCH_TAG_LATEST}" ]; then
     			echo -e "new tag: ${UP_TAG}\n"
     		else
     			break
