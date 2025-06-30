@@ -49,32 +49,32 @@ inputs:
   
   git_config_user:
     description: 'Git user credentials for sigining commit, (set to "null" for no config)'
-    required: true
+    required: false
     default: 'GH Action - Upstream Sync'
 
   git_config_email:
     description: 'Git email credentials for sigining commit (set to "null" for no config)'
-    required: true
+    required: false
     default: 'action@github.com'
   
   git_config_pull_rebase:
     description: 'Git config for "pull.rebase" settings, usually recommend false for this action (set to "null" for no config)'
-    required: true
+    required: false
     default: 'true'
 
   test_mode:
     description: If set to 'true', runs verification test on all inputs and any testable actions that use them
-    required: true
+    required: false
     default: 'false'
   
   host_domain:
     description: 'Domain name to be used in upstream repo URL.'
-    required: true
+    required: false
     default: 'github.com'
 
   shallow_since:
     description: 'Length of time used when fetching shallow repo data, should match how often you perform a sync'
-    required: true
+    required: false
     default: '4 year ago'
 
 outputs:
