@@ -19,12 +19,12 @@ check_for_updates() {
     fi
 
     UPSTREAM_COMMIT_HASH=$(git rev-parse "upstream/${INPUT_UPSTREAM_SYNC_BRANCH}")
-    UPSTREAM_COMMIT_TAG=$(git describe upstream/${INPUT_UPSTREAM_SYNC_BRANCH} --tags --abbrev=0 2>/dev/null)
+    UPSTREAM_COMMIT_TAG=$(git describe "upstream/${INPUT_UPSTREAM_SYNC_BRANCH}" --tags --abbrev=0 2>/dev/null)
 
     # check is latest upstream hash is in target branch
     git fetch --quiet --tags --shallow-since="${INPUT_SHALLOW_SINCE}" origin "${INPUT_TARGET_SYNC_BRANCH}"
     BRANCH_WITH_LATEST="$(git branch "${INPUT_TARGET_SYNC_BRANCH}" --contains="${UPSTREAM_COMMIT_HASH}")"
-    BRANCH_TAG_LATEST=$(git describe ${INPUT_TARGET_SYNC_BRANCH} --tags --abbrev=0 2>/dev/null)
+    BRANCH_TAG_LATEST=$(git describe "${INPUT_TARGET_SYNC_BRANCH}" --tags --abbrev=0 2>/dev/null)
 
     if [ -z "${UPSTREAM_COMMIT_HASH}" ]; then
         HAS_NEW_COMMITS="error"
