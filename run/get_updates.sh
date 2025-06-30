@@ -81,16 +81,29 @@ find_last_synced_commit() {
 
 # display new commits since last sync
 output_new_commit_list() {
-	echo "检测变量"
-    echo ${LAST_SYNCED_COMMIT}
-    echo "检测完成"
-    if [ -z "${LAST_SYNCED_COMMIT}" ]; then
+    if [ "${HAS_NEW_COMMITS}" != true ] && [ -z "${LAST_SYNCED_COMMIT}" ]; then
         write_out -1 "\nNo previous sync found from upstream repo. Syncing entire commit history."
         UNSHALLOW=true
     else
         write_out -1 '\nNew commits since last sync:'
         git log upstream/"${INPUT_UPSTREAM_SYNC_BRANCH}" "${LAST_SYNCED_COMMIT}"..HEAD ${INPUT_GIT_LOG_FORMAT_ARGS}
     fi
+
+    if [ "${HAS_NEW_TAGS}" = true ]; then
+    	write_out -1 '\nNew tags since last sync:'
+    	UPSTREAM_TAGS="$(git ls-remote --tags --quiet --sort=-v:refname upstream)"
+    	for tag in ${UPSTREAM_TAGS}; do
+    		UP_TAG="$(awk -F'refs/tags/' '{if (NF>1) print $2}' "${tag}" | sed 's/\^\{\}$//')"
+    		if [ "${UP_TAG}" != "${BRANCH_TAG_LATEST}" ]
+    			echo -e "new tag: ${UP_TAG}\n"
+    		else
+    			break
+    		fi
+    	done
+    else
+    	write_out -1 '\nNo found tags'
+    fi
+
 }
 
 # sync from upstream to target_sync_branch
