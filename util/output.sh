@@ -22,32 +22,32 @@ write_out() {
     # red output
     [Rr])
         echo "${BOLD}${RED}$2${NORMAL}" 1>&1
-        echo "* $2" >> $GITHUB_STEP_SUMMARY
+        echo "$2" >> $GITHUB_STEP_SUMMARY
         ;;
 
     # yellow output
     [Yy])
         echo "${BOLD}${YELLOW}$2${NORMAL}" 1>&1
-        echo "* $2" >> $GITHUB_STEP_SUMMARY
+        echo "$2" >> $GITHUB_STEP_SUMMARY
         ;;
 
     # green output
     [Gg])
         echo "${BOLD}${GREEN}$2${NORMAL}" 1>&1
-        echo "* $2" >> $GITHUB_STEP_SUMMARY
+        echo "$2" >> $GITHUB_STEP_SUMMARY
         ;;
 
     # green output
     [Bb])
         echo "${BOLD}${BLUE}$2${NORMAL}" 1>&1
-        echo "* $2" >> $GITHUB_STEP_SUMMARY
+        echo "$2" >> $GITHUB_STEP_SUMMARY
         ;;
 
     # safe exit, green output
     0)
         printf '\n%s\n' "$2" 1>&1
         echo "${BOLD}${GREEN}安全退出${NORMAL}" 1>&1
-        echo "* 安全退出" >> $GITHUB_STEP_SUMMARY
+        echo "安全退出" >> $GITHUB_STEP_SUMMARY
         early_exit_cleanup
         exit 0
         ;;
@@ -55,7 +55,7 @@ write_out() {
     # exit on error, red output
     *)
         echo "${BOLD}${RED}错误: ${NORMAL} 退出 $1" 1>&2
-        echo "* 错误: 退出 $1" >> $GITHUB_STEP_SUMMARY
+        echo "错误: 退出 $1" >> $GITHUB_STEP_SUMMARY
         printf '%s\n' "$2" 1>&2
         printf '%s\n' "Try running in test mode to verify your action input. If that does not help, please open an issue." 1>&2
 
