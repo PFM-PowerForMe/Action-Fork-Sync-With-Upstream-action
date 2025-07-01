@@ -2,7 +2,7 @@
 
 # checkout target branch for updates
 checkout() {
-    write_out -1 "Checking out target branch '${INPUT_TARGET_SYNC_BRANCH}' for sync."
+    write_out -1 "检出同步目标分支 '${INPUT_TARGET_SYNC_BRANCH}'."
 
     # shellcheck disable=SC2086
     git checkout ${INPUT_TARGET_BRANCH_CHECKOUT_ARGS} "${INPUT_TARGET_SYNC_BRANCH}"
@@ -10,9 +10,9 @@ checkout() {
 
     if [ "${COMMAND_STATUS}" != 0 ]; then
         # exit on branch checkout fail
-        write_out "${COMMAND_STATUS}" "Target branch '${INPUT_TARGET_SYNC_BRANCH}' could not be checked out."
+        write_out "${COMMAND_STATUS}" "同步目标分支 '${INPUT_TARGET_SYNC_BRANCH}' 检出失败."
     fi
 
-    write_out -1 "Target branch checked out"
-    write_out "g" "SUCCESS\n"
+    write_out -1 "同步目标分支检出"
+    write_out "g" "完成\n"
 }

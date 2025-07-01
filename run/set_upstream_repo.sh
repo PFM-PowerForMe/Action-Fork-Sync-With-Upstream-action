@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set_upstream() {
-    write_out -1 "Setting upstream repo to '${INPUT_UPSTREAM_SYNC_REPO}'."
+    write_out -1 "设置上游仓库 '${INPUT_UPSTREAM_SYNC_REPO}'."
     git remote add upstream "${UPSTREAM_REPO_URL}"
 
     # # exit if upstream can't be accessed
@@ -9,7 +9,7 @@ set_upstream() {
     #     write_out "$?" "Could not verify upstream repo."
     # fi
 
-    write_out "g" "SUCCESS\n"
+    write_out "g" "完成\n"
 }
 
 # # LOCAL MODE - handle if 'upstream' repo url is already set to another value

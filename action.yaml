@@ -1,6 +1,6 @@
-name: 'Upstream Sync'
-author: 'Adam Ormsby (@aormsby)'
-description: 'Automatically updates a target branch with new commits from an upstream repo, great for forks or parallel projects'
+name: 'PFM-Upstream-Sync'
+author: 'PFM-PowerForMe'
+description: '自动同步上游分支.'
 
 branding:
   icon: refresh-ccw
@@ -50,12 +50,12 @@ inputs:
   git_config_user:
     description: 'Git user credentials for sigining commit, (set to "null" for no config)'
     required: false
-    default: 'GH Action - Upstream Sync'
+    default: 'sync-bot'
 
   git_config_email:
     description: 'Git email credentials for sigining commit (set to "null" for no config)'
     required: false
-    default: 'action@github.com'
+    default: 'sync-bot@users.noreply.github.com'
   
   git_config_pull_rebase:
     description: 'Git config for "pull.rebase" settings, usually recommend false for this action (set to "null" for no config)'

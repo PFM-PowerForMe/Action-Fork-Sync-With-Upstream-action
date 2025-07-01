@@ -2,10 +2,10 @@
 
 # called by run_action.sh
 config_for_action() {
-    write_out -1 "Setting git config from input vars. (Skips config for all inputs set to 'null'.)"
+    write_out -1 "从INPUT获取Git配置. (跳过所有为'null'的配置.)"
     get_current_user_config
     set_git_config "${INPUT_GIT_CONFIG_USER}" "${INPUT_GIT_CONFIG_EMAIL}" "${INPUT_GIT_CONFIG_PULL_REBASE}"
-    write_out "g" "SUCCESS\n"
+    write_out "g" "完成\n"
 }
 
 # store current user config data for reset after action run
@@ -35,7 +35,7 @@ set_git_config() {
 
 # reset to original user config values
 reset_git_config() {
-    write_out -1 "Resetting git config to previous settings."
+    write_out -1 "将Git配置重置."
 
     if [ "${CURRENT_USER}" = "null" ]; then
         git config --unset user.name
@@ -51,5 +51,5 @@ reset_git_config() {
 
     git config pull.rebase "${CURRENT_PULL_CONFIG}"
 
-    write_out "b" "Reset Complete\n"
+    write_out "b" "重置完成\n"
 }

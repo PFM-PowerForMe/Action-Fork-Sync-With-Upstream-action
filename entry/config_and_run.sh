@@ -77,8 +77,12 @@ if [ "${INPUT_TEST_MODE}" = true ]; then
     . "${ACTION_PARENT_DIR}"/entry/run_tests.sh
     write_out "b" "Tests Complete"
 else
-    write_out "b" "Running ACTION...\n"
+    echo "# Sync 摘要" >> $GITHUB_STEP_SUMMARY
+	echo "## 运行时间" >> $GITHUB_STEP_SUMMARY
+	echo "$(TZ='Asia/Shanghai' date '+%Y-%m-%d %H:%M:%S') UTC8" >> $GITHUB_STEP_SUMMARY
+	echo "### 详情" >> $GITHUB_STEP_SUMMARY
+    write_out "b" "运行 ACTION...\n"
     # shellcheck disable=SC1091
     . "${ACTION_PARENT_DIR}"/entry/run_action.sh
-    write_out "b" "Action Complete"
+    write_out "b" "Action 完成"
 fi

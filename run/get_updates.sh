@@ -4,7 +4,7 @@
 
 # check latest commit hashes for a match, exit if nothing to sync
 check_for_updates() {
-    write_out -1 'Checking for new commits on upstream branch.\n'
+    write_out -1 '从上游检出最新提交.\n'
 
     # fetch commits from upstream branch within given time frame (default 1 month)
     git fetch --quiet --tags --shallow-since="${INPUT_SHALLOW_SINCE}" upstream "${INPUT_UPSTREAM_SYNC_BRANCH}"
@@ -62,12 +62,12 @@ check_for_updates() {
     if [ "${HAS_NEW_COMMITS}" = false ] && [ "${HAS_NEW_TAGS}" = false ]; then
         exit_no_commits
     elif [ "${HAS_NEW_COMMITS}" = "error" ] && [ "${HAS_NEW_TAGS}" = "error" ]; then
-        write_out 95 'There was an error checking for new commits.'
+        write_out 95 '检出最新提交错误.'
     fi
 }
 
 exit_no_commits() {
-    write_out 0 'No new commits to sync. Finishing sync action gracefully.'
+    write_out 0 '没有需要同步的新提交. Action 完成.'
 }
 
 set_out_put() {
@@ -93,14 +93,14 @@ find_last_synced_commit() {
 # display new commits since last sync
 output_new_commit_list() {
     if [ "${HAS_NEW_COMMITS}" != true ] || [ -z "${LAST_SYNCED_COMMIT}" ]; then
-        write_out -1 "\nNo previous sync found from upstream repo. Syncing entire commit history."
+        write_out -1 "\n没有从上游仓库找到需要同步的提交."
     else
-        write_out -1 '\nNew commits since last sync:'
+        write_out -1 '\n自上次同步以来的新提交:'
         git log upstream/"${INPUT_UPSTREAM_SYNC_BRANCH}" "${LAST_SYNCED_COMMIT}"..HEAD ${INPUT_GIT_LOG_FORMAT_ARGS}
     fi
 
     if [ "${HAS_NEW_TAGS}" = true ]; then
-    	write_out -1 '\nNew tags since last sync:'
+    	write_out -1 '\n自上次同步以来的新标签:'
     	UPSTREAM_TAGS="$(git for-each-ref --sort=-creatordate --format '%(refname:short)' refs/tags)"
     	for UP_TAG in ${UPSTREAM_TAGS}; do
     		if [ "${UP_TAG}" != "${BRANCH_TAG_LATEST}" ]; then
@@ -110,13 +110,13 @@ output_new_commit_list() {
     		fi
     	done
     else
-    	write_out -1 '\nNo found tags.'
+    	write_out -1 '\n没有从上游仓库找到需要同步的标签.'
     fi
 }
 
 # sync from upstream to target_sync_branch
 sync_new_commits() {
-    write_out -1 '\nSyncing new commits...'
+    write_out -1 '\n同步...'
 
     # if [ "${UNSHALLOW}" = true ]; then
         # git repack -d upstream "${INPUT_UPSTREAM_SYNC_BRANCH}"
@@ -132,8 +132,8 @@ sync_new_commits() {
 
     if [ "${COMMAND_STATUS}" != 0 ]; then
         # exit on commit pull fail
-        write_out "${COMMAND_STATUS}" "New commits could not be pulled."
+        write_out "${COMMAND_STATUS}" "新的提交无法拉取."
     fi
 
-    write_out "g" 'SUCCESS\n'
+    write_out "g" '完成\n'
 }
