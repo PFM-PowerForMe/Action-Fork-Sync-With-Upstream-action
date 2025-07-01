@@ -96,7 +96,10 @@ output_new_commit_list() {
         write_out -1 "\n没有从上游仓库找到需要同步的提交."
     else
         write_out -1 '\n自上次同步以来的新提交:'
-        git log upstream/"${INPUT_UPSTREAM_SYNC_BRANCH}" "${LAST_SYNCED_COMMIT}"..HEAD ${INPUT_GIT_LOG_FORMAT_ARGS}
+        NEW_COMMIT_LT="$(git log upstream/"${INPUT_UPSTREAM_SYNC_BRANCH}" "${LAST_SYNCED_COMMIT}"..HEAD ${INPUT_GIT_LOG_FORMAT_ARGS})"
+        for nml in ${NEW_COMMIT_LT}; do
+        	write_out -1 "新提交: ${UP_TAG}\n"
+        done
     fi
 
     if [ "${HAS_NEW_TAGS}" = true ]; then
@@ -104,7 +107,7 @@ output_new_commit_list() {
     	UPSTREAM_TAGS="$(git for-each-ref --sort=-creatordate --format '%(refname:short)' refs/tags)"
     	for UP_TAG in ${UPSTREAM_TAGS}; do
     		if [ "${UP_TAG}" != "${BRANCH_TAG_LATEST}" ]; then
-    			write_out -1 "new tag: ${UP_TAG}\n"
+    			write_out -1 "新标签: ${UP_TAG}\n"
     		else
     			break
     		fi
