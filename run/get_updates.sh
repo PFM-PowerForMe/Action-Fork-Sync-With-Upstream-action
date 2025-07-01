@@ -71,7 +71,9 @@ exit_no_commits() {
 }
 
 set_out_put() {
+	
     echo "has_new_commits=${HAS_NEW_COMMITS}" >> $GITHUB_OUTPUT
+    
     echo "has_new_tags=${HAS_NEW_TAGS}" >> $GITHUB_OUTPUT
     echo "version=${VERSION}" >> $GITHUB_OUTPUT
 }
