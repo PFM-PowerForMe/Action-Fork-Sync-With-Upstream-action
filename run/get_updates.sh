@@ -99,8 +99,8 @@ output_new_commit_list() {
     else
         write_out -1 '\n自上次同步以来的新提交:'
         NEW_COMMIT_LT="$(git log upstream/"${INPUT_UPSTREAM_SYNC_BRANCH}" "${LAST_SYNCED_COMMIT}"..HEAD ${INPUT_GIT_LOG_FORMAT_ARGS})"
-        for nml in ${NEW_COMMIT_LT}; do
-        	write_out -1 "新提交: ${UP_TAG}\n"
+        for NML in ${NEW_COMMIT_LT}; do
+        	write_out -1 "新提交: ${NML}\n"
         done
     fi
 
